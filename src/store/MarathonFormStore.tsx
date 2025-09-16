@@ -9,7 +9,7 @@ export const PRICES: Record<MarathonFormState["plan"], number> = {
 };
 
 export const coupon_Code = "CMU2025";
-const discount_Rate = 0.7;
+const discount_Rate = 0.3;
 
 export const useMarathonFormStore = create<MarathonFormState>((set) => ({
   fname: "",
@@ -42,7 +42,7 @@ export const useMarathonFormStore = create<MarathonFormState>((set) => ({
   discountCupon: (plan, haveCoupon, couponCode) => {
     const base = PRICES[plan] ?? 0;
     const ok = haveCoupon && (couponCode?.trim() === coupon_Code);
-    return ok ? Math.round(base * (discount_Rate)) : base;
+    return ok ? Math.round(base * (1 - discount_Rate)) : base;
   },
 
   reset: () =>

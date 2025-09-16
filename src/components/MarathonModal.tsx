@@ -18,7 +18,6 @@ import { zod4Resolver } from "mantine-form-zod-resolver";
 import { marathonSchema } from "../zod/MarathonSchema";
 import { useEffect, useState } from "react";
 import { type MarathonModalProps } from "../libs/Marathon";
-const { discountCupon } = useMarathonFormStore();
 export default function MarathonModal({ opened, onClose }: MarathonModalProps) {
   const [agree, setAgree] = useState(false);
   const {
@@ -33,6 +32,7 @@ export default function MarathonModal({ opened, onClose }: MarathonModalProps) {
     setGender,
     setEmail,
     reset,
+    discountCupon,
   } = useMarathonFormStore();
 
   // Mantine Form
