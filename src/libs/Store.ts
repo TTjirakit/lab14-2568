@@ -12,6 +12,11 @@ interface MarathonFormState {
   setGender: (v: MarathonForm["gender"]) => void;
   setEmail: (v: string) => void;
   // Function ชื่อ discountCupon คำนวณ total ตรงนี้
+  discountCupon: (
+    plan: MarathonForm["plan"],
+    haveCoupon: boolean,
+    couponCode?: string
+  ) => number;
   reset: () => void;
 }
 export type { MarathonFormState }

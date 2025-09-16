@@ -18,6 +18,7 @@ import { zod4Resolver } from "mantine-form-zod-resolver";
 import { marathonSchema } from "../zod/MarathonSchema";
 import { useEffect, useState } from "react";
 import { type MarathonModalProps } from "../libs/Marathon";
+const { discountCupon } = useMarathonFormStore();
 export default function MarathonModal({ opened, onClose }: MarathonModalProps) {
   const [agree, setAgree] = useState(false);
   const {
@@ -43,18 +44,30 @@ export default function MarathonModal({ opened, onClose }: MarathonModalProps) {
       gender,
       agree,
       email,
+      password: "",
+      confirmPassword: "",
+      haveCoupon: false,
+      couponCode: "",
     },
     validate: zod4Resolver(marathonSchema),
     validateInputOnChange: true,
+    validateInputOnBlur: true,
   });
   // update Zustand form real-time
   useEffect(() => {}, []);
 
   const onSubmitRegister = () => {
     //  alert หลังจาก กด Register
+    alert("See you at CMU Marathon");
     onClose();
     reset();
   };
+
+  const total = discountCupon(
+  mantineForm.values.plan as "funrun" | "mini" | "half" | "full",
+  mantineForm.values.haveCoupon,
+  mantineForm.values.couponCode
+  );
 
   return (
     <Modal
@@ -104,11 +117,13 @@ export default function MarathonModal({ opened, onClose }: MarathonModalProps) {
             label="Password"
             description="Password must contain 6-12 charaters"
             withAsterisk
+            {...mantineForm.getInputProps("password")}
           />
           <PasswordInput
             label="Confirm Password"
             description="Confirm Password"
             withAsterisk
+            {...mantineForm.getInputProps("confirmPassword")}
           />
           <Select
             label="Plan"
@@ -150,11 +165,20 @@ export default function MarathonModal({ opened, onClose }: MarathonModalProps) {
             Coupon (30% Discount)
           </Alert>
           {/* เลือกกรออก coupon ตรงนี้ */}
-          <Checkbox label="I have coupon" />
+          <Checkbox label="I have coupon" 
+          {...mantineForm.getInputProps("haveCoupon",{ type: "checkbox"})}
+          />
           {/* จะต้องแสดงเมื่อกด เลือก I have coupon เท่านั้น*/}
-          <TextInput label="Coupon Code" />
+          {mantineForm.values.haveCoupon && (
+          <TextInput label="Coupon Code" 
+          placeholder="Enter coupon code"
+          {...mantineForm.getInputProps("couponCode")}
+          />
+          )}
           {/* แสดงราคาการสมัครงานวิ่งตามแผนที่เลือก  */}
-          <Text>Total Payment : THB</Text>
+          <Text>
+            <b>Total Payment :</b> {total.toLocaleString()} THB
+          </Text>
           <Divider my="xs" variant="dashed" />
           <Checkbox
             label={
